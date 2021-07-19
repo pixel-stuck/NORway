@@ -332,6 +332,13 @@ uint8_t nand_read_id(nand_port *nandp)
 	//size_data = 0x15;
 	//plane_data = 0x40;
 	
+	//Samsung K9F1208U0M
+	//maker_code = 0xec;
+	//device_code = 0x76;
+	//chip_data = 0xa5;
+	//size_data = 0xc0;
+	//plane_data = 0x00; /??
+	
 	//Samsung K9T1G08U0M
 	//maker_code = 0xec;
 	//device_code = 0x79;
@@ -414,6 +421,14 @@ uint8_t nand_read_id(nand_port *nandp)
 		nandp->info.page_size  = 512;
 		nandp->info.block_size = 32UL * nandp->info.page_size;
 		nandp->info.num_planes = 1;
+		nandp->info.oob_size = 16;
+		nandp->info.plane_size = 1UL << 24;
+		nandp->info.bus_width = 8;
+	}
+	else if ((maker_code == 0xEC) && (device_code == 0x76)) { // Samsung K9F1208U0M
+		nandp->info.page_size  = 512;
+		nandp->info.block_size = 32UL * nandp->info.page_size;
+		nandp->info.num_planes = 4;
 		nandp->info.oob_size = 16;
 		nandp->info.plane_size = 1UL << 24;
 		nandp->info.bus_width = 8;
@@ -514,7 +529,7 @@ uint8_t nand_read_page(nand_port *nandp) {
 		NAND_IO_SET(nandp, buf_addr[0]);
 		NAND_IO_SET(nandp, buf_addr[1]);
 	}
-	else if ((nandp->info.maker_code == 0xEC) && (nandp->info.device_code == 0x79)) { // Samsung K9T1G08U0M
+	else if ((nandp->info.maker_code == 0xEC) && ((nandp->info.device_code == 0x79) || (device_code == 0x76))) { // Samsung K9T1G08U0M
 		NAND_IO_SET(nandp, 0);
 		NAND_IO_SET(nandp, buf_addr[0]);
 		NAND_IO_SET(nandp, buf_addr[1]);
@@ -531,7 +546,7 @@ uint8_t nand_read_page(nand_port *nandp) {
 
 	if ((nandp->info.maker_code == 0xAD) && (nandp->info.device_code == 0x73))
 		_delay_ns(100);
-	else if ((nandp->info.maker_code == 0xEC) && (nandp->info.device_code == 0x79)) // Samsung K9T1G08U0M
+	else if ((nandp->info.maker_code == 0xEC) && ((nandp->info.device_code == 0x79) || (nandp->info.device_code == 0x76))) // Samsung K9T1G08U0M and Samsung K9F1208U0M
 		_delay_ns(100);
 	else
 		NAND_COMMAND(nandp, NAND_COMMAND_READ2);
@@ -596,7 +611,7 @@ int8_t nand_write_page(nand_port *nandp) {
 		NAND_IO_SET(nandp, buf_addr[0]);
 		NAND_IO_SET(nandp, buf_addr[1]);
 	}
-	else if ((nandp->info.maker_code == 0xEC) && (nandp->info.device_code == 0x79)) { // Samsung K9T1G08U0M
+	else if ((nandp->info.maker_code == 0xEC) && ((nandp->info.device_code == 0x79) || (nandp->info.device_code == 0x76))) { // Samsung K9T1G08U0M
 		NAND_IO_SET(nandp, 0);
 		NAND_IO_SET(nandp, buf_addr[0]);
 		NAND_IO_SET(nandp, buf_addr[1]);
