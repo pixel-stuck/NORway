@@ -194,6 +194,8 @@ class NANDFlasher(TeensySerial):
 				print "NAND chip type:         K9GAG08U0M (0x%02x)"%self.DEVICE_ID
 			elif self.DEVICE_ID == 0xF1:
 				print "NAND chip type:         K9F1G08U0A (0x%02x)"%self.DEVICE_ID
+			elif self.DEVICE_ID == 0x76:
+				print "NAND chip type:         K9F1208U0M (0x%02x)"%self.DEVICE_ID
 			elif self.DEVICE_ID == 0x79:
 				print "NAND chip type:         K9T1G08U0M (0x%02x)"%self.DEVICE_ID
 			elif self.DEVICE_ID == 0xDA:
